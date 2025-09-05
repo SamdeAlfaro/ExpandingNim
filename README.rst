@@ -173,4 +173,5 @@ Misc
 You can tail the game as it progresses by tailing the ``game-log.txt`` file created
 during the game. This can be used for debugging or just to enjoy the game.
 
-In case of any issues or bugs, please email me at Munir Contractor <mmc691@nyu.edu>.
+This code was originally created by Munir Contractor <mmc691@nyu.edu>.
+It has been adapted by Arush Jasuja <arushjasuja@gmail.com> and Sam de Alfaro <sam.dealfaro@nyu.edu>.

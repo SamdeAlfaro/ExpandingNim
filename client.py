@@ -33,6 +33,13 @@ class Client():
         self.init_stones = init_status['init_stones']
         self.init_resets = init_status['init_resets']
 
+        print("Welcome to Expanding Nim, %s!" % name)
+        print("You are player %d and will go %s." %
+              (self.__order + 1, 'first' if goes_first else 'second'))
+        print("The game starts with %d stones and you have %d resets." %
+                (self.init_stones, self.init_resets))
+        print('---------------------------------------')
+
     def close(self):
         self.socket.close()
 

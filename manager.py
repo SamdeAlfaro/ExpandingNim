@@ -229,6 +229,10 @@ class ExpNimManager():
         """
         data = self.__server.establish_connections()
         players_data = list(map(lambda x: json.loads(x.decode('utf-8')), data))
+        self.__log.write('Game started between')
+        self.__log.write('Initial stones: %d, Initial resets: %d\n' % (
+                         self.stones_left, self.init_resets))
+        self.__log.write('---------------------------------------\n')
         if players_data[1]['order'] == 0:
             players_data.reverse()
             self.__server.player_sockets.reverse()

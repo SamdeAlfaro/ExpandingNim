@@ -19,31 +19,49 @@ import sys
 from manager import ExpNimManager
 
 if __name__ == '__main__':
+    # Default values
+    init_max = 3
+    game_time = 120
+    port = 9000
+    address = ''
+
     try:
         opts, args = getopt(sys.argv[1:], 'a:m:p:t:')
     except GetoptError:
         sys.stderr.write('Error parsing options\n')
         sys.stderr.write(__doc__)
         exit(-1)
-    init_max = 3
-    time = 120
-    port = 9000
-    address = ''
-    for o, a in opts:
-        if o == '-a':
-            address = a
-        elif o == '-m':
-            init_max = int(a)
-        elif o == '-p':
-            port = int(a)
-        elif o == '-t':
-            time = int(a)
+    for opt, arg in opts:
+        if opt == '-a':
+            address = arg
+        elif opt == '-m':
+            init_max = int(arg)
+        elif opt == '-p':
+            port = int(arg)
+        elif opt == '-t':
+            game_time = int(arg)
     try:
         init_stones = int(args[0])
         num_resets = int(args[1])
     except (IndexError, ValueError):
+        sys.stderr.write('Error: must provide number of stones and resets\n')
         sys.stderr.write(__doc__)
         exit(-1)
-    game_manager = ExpNimManager(init_stones, num_resets, init_max=init_max,
-                                 game_time=time, address=address, port=port)
+
+    # Print game conditions
+    print("Starting Expanding Nim with the following conditions:")
+    print(f"  Initial stones: {init_stones}")
+    print(f"  Number of resets: {num_resets}")
+    print(f"  Initial max number: {init_max}")
+    print(f"  Game time per player: {game_time} seconds")
+    print(f"  Server address: {address or 'localhost'}")
+    print(f"  Server port: {port}\n")
+
+    game_manager = ExpNimManager(
+        init_stones, num_resets,
+        init_max=init_max,
+        game_time=game_time,
+        address=address,
+        port=port
+    )
     game_manager.run_game()

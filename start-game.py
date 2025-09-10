@@ -13,7 +13,7 @@ where:
     t is the game time in seconds (Default: 120)
 """
 
-from getopt import getopt
+from getopt import getopt, GetoptError
 import sys
 
 from manager import ExpNimManager
@@ -37,7 +37,7 @@ if __name__ == '__main__':
         elif o == '-p':
             port = int(a)
         elif o == '-t':
-            time = int(t)
+            time = int(a)
     try:
         init_stones = int(args[0])
         num_resets = int(args[1])

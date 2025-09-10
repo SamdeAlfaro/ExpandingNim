@@ -102,7 +102,7 @@ equivalent methods repeatedly and check if the game ended after each move by loo
 ``finished`` value in the JSON that is returned by the server. See ``sample_client_usage.py``
 script for a working example.
 
-ExpVimManager
+ExpNimManager
 +++++++++++++
 
 This is the class that contains the rules of the game and controls it. It is initialized

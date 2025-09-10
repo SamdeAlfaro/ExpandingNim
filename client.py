@@ -46,6 +46,12 @@ class Client():
     def __del__(self):
         self.close()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+
     def __send_json(self, json_object):
         """Helper method to send an object to the server as JSON"""
         self.socket.sendall(bytes(json.dumps(json_object), 'utf-8'))
@@ -92,7 +98,11 @@ class Client():
         Return:
             A dict containing the keys described above
         """
-        return json.loads(self.socket.recv(self.DATA_SIZE).decode('utf-8'))
+        try:
+            data = self.socket.recv(self.DATA_SIZE).decode('utf-8')
+            return json.loads(data)
+        except (socket.error, json.JSONDecodeError) as e:
+            raise ConnectionError(f"Failed to receive move: {e}")
 
     def __read_move(self):
         try:

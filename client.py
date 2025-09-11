@@ -28,6 +28,7 @@ class Client():
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect(server_address)
         self.__order = 0 if goes_first else 1
+        self.__current_player = None
         self.__send_json({'name': name, 'order': self.__order})
         init_status = self.receive_move()
         self.init_stones = init_status['init_stones']
@@ -100,7 +101,9 @@ class Client():
         """
         try:
             data = self.socket.recv(self.DATA_SIZE).decode('utf-8')
-            return json.loads(data)
+            json_data = json.loads(data)
+            self.__current_player = 1 - self.__order if not json_data.get('finished', True) else None
+            return json_data
         except (socket.error, json.JSONDecodeError) as e:
             raise ConnectionError(f"Failed to receive move: {e}")
 
@@ -120,10 +123,17 @@ class Client():
         flag for whether reset should be done. The move and the result
         are printed out.
         """
+        if self.__current_player is not None and self.__current_player != self.__order:
+            print("It's not your turn yet. Waiting for opponent...")
+            status = self.receive_move()
+            self.__current_player = 1 - self.__current_player
+            self.get_move()  # print opponent move
+            return self.send_move()  # now read your move
         move = self.__read_move()
         status = self.make_move(move[0], move[1])
+        self.__current_player = 1 - self.__order
         print('You took %d stones%s' % (move[0],
-              ' and used reset.' if move[1] else '.'))
+            ' and used reset.' if move[1] else '.'))
         print('Current max: %d' % status['current_max'])
         print('Stones left: %d' % status['stones_left'])
         print('---------------------------------------')
@@ -134,8 +144,9 @@ class Client():
     def get_move(self):
         """Gets the move made by the opponent and prints it out"""
         status = self.receive_move()
+        self.__current_player = self.__order
         print('Opponent took %d stones%s' % (status['stones_removed'],
-              ' and used reset.' if status['reset_used'] else '.'))
+            ' and used reset.' if status['reset_used'] else '.'))
         print('Current max: %d' % status['current_max'])
         print('Stones left: %d' % status['stones_left'])
         print('---------------------------------------')

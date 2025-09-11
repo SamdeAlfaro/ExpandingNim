@@ -1,0 +1,32 @@
+Game started betweenInitial stones: 20, Initial resets: 2
+---------------------------------------
+Player Bob took 1 stones.
+Current max: 3
+Stones left: 19
+---------------------------------------
+Player Alice took 1 stones.
+Current max: 3
+Stones left: 18
+---------------------------------------
+Player Bob took 1 stones.
+Current max: 3
+Stones left: 17
+---------------------------------------
+Player Alice took 1 stones.
+Current max: 3
+Stones left: 16
+---------------------------------------
+Player Bob took 1 stones.
+Current max: 3
+Stones left: 15
+---------------------------------------
+Player Alice took 1 stones.
+Current max: 3
+Stones left: 14
+---------------------------------------
+Player Bob took 4 stones.
+Current max: 3
+Stones left: 14
+---------------------------------------
+Game over
+Player Bob made an illegal move

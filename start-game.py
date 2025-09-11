@@ -48,15 +48,6 @@ if __name__ == '__main__':
         sys.stderr.write(__doc__)
         exit(-1)
 
-    # Print game conditions
-    print("Starting Expanding Nim with the following conditions:")
-    print(f"  Initial stones: {init_stones}")
-    print(f"  Number of resets: {num_resets}")
-    print(f"  Initial max number: {init_max}")
-    print(f"  Game time per player: {game_time} seconds")
-    print(f"  Server address: {address or 'localhost'}")
-    print(f"  Server port: {port}\n")
-
     game_manager = ExpNimManager(
         init_stones, num_resets,
         init_max=init_max,

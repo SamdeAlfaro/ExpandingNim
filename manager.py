@@ -229,15 +229,18 @@ class ExpNimManager():
         """
         data = self.__server.establish_connections()
         players_data = list(map(lambda x: json.loads(x.decode('utf-8')), data))
-        self.__log.write('Game started between')
+        self.__log.write('Game started!\n')
         self.__log.write('Initial stones: %d, Initial resets: %d\n' % (
                          self.stones_left, self.init_resets))
+        self.__log.write('Time per player: %d seconds\n' % (self.__time_limit))
         self.__log.write('---------------------------------------\n')
+        self.__log.flush()
         if players_data[1]['order'] == 0:
             players_data.reverse()
             self.__server.player_sockets.reverse()
         self.players[0]['name'] = players_data[0]['name']
         self.players[1]['name'] = players_data[1]['name']
+        
         self.__server.update_all_clients(
                 bytes(json.dumps({'init_stones': self.stones_left,
                                   'init_resets': self.init_resets}), 'utf-8'))
@@ -265,3 +268,4 @@ class ExpNimManager():
         self.__log.write('---------------------------------------\n')
         if state['finished']:
             self.__log.write('Game over\n%s\n' % state['reason'])
+        self.__log.flush()

@@ -73,7 +73,7 @@ class ExpNimManager():
                              'player_1': self.players[1],
                              }
         # Start with player 0
-        self.__previous_player = 1
+        self.__current_player = 0
         self.__over = False
         self.__time_limit = game_time
         self.__prev_time = None
@@ -180,7 +180,7 @@ class ExpNimManager():
             game_state['winner'] = self.players[1 - player_number]['name']
             game_state['reason'] = ('Player %s exceeded time limit' %
                                     self.players[player_number]['name'])
-        elif player_number == self.__previous_player:
+        elif player_number != self.__current_player:
             # Player moved out of turn
             game_state['finished'] = True
             game_state['winner'] = self.players[1 - player_number]['name']
@@ -207,7 +207,7 @@ class ExpNimManager():
         else:
             # Normal game continues
             game_state['finished'] = False
-            self.__previous_player = player_number
+            self.__current_player = 1 - self.__current_player
 
         game_state['current_max'] = self.current_max
         game_state['stones_left'] = self.stones_left
@@ -244,9 +244,8 @@ class ExpNimManager():
         self.players[0].prev_time = datetime.now()
 
         while True:
-            player = 1 - self.__previous_player
-            next_move = json.loads(self.__server.receive(player)
-                                   .decode('utf-8'))
+            player = self.__current_player
+            next_move = json.loads(self.__server.receive(player).decode('utf-8'))
             game_state = self.move(player,
                                    next_move['num_stones'],
                                    next_move['reset'])

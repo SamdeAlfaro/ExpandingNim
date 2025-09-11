@@ -21,6 +21,52 @@ reset option, this number gets reset to the initial maximum, *m*. If a player mo
 turn, tries to use more than *r* resets, tries to take more than stones than the current
 maximum or times out the game is automatically awarded to the other player.
 
+Quick Start
+-----------
+Follow these steps to start a game and run a client for testing:
+
+1. **Start the Game Manager**
+
+   Run the server/manager with your desired configuration:
+
+   .. code-block:: bash
+
+       ./start-game.py -m 3 -p 9000 -t 120 20 2
+
+   This will start a game with:
+   - 20 stones
+   - 2 resets per player
+   - Initial maximum of 3 stones per move
+   - Port 9000
+   - Time limit 120 seconds per player
+
+2. **Start Clients**
+
+   In separate terminals, start two clients (players). You can use the command-line client ``exp-nim``:
+
+   .. code-block:: bash
+
+       ./exp-nim -f -n Alice localhost:9000
+       ./exp-nim -n Bob localhost:9000
+
+   Notes:
+   - ``-f`` indicates the first player
+   - ``-n`` specifies the player name
+   - ``localhost:9000`` connects to the server you started
+
+   The clients will automatically connect and begin the game. Follow the prompts to make moves.
+   For instance, typing in ``1 0`` will remove one stone, and not use a reset.
+
+3. **Run an Automated Client (Optional)**
+
+   If you want to test a bot or scripted client, use the provided sample client: ``sample_client_usage.py``.
+
+   Run it in a terminal like any client:
+
+   .. code-block:: bash
+
+       python sample_client_usage.py -f -n Bob localhost:9000
+
 Classes
 -------
 

@@ -85,7 +85,7 @@ if __name__ == "__main__":
     atexit.register(client.close)
 
     print(f"Connected as {name}.")
-    print(f"Game has {client.init_stones} stones, {client.init_resets} resets.")
+    print(f"Game has {client.init_stones} stones, {client.init_resets} resets, and {client.game_time}.")
 
     # ---------------------------
     # Step 3: If this bot goes first, make an initial move

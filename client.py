@@ -33,12 +33,13 @@ class Client():
         init_status = self.receive_move()
         self.init_stones = init_status['init_stones']
         self.init_resets = init_status['init_resets']
+        self.game_time = init_status.get('game_time', 120)
 
         print("Welcome to Expanding Nim, %s!" % name)
         print("You are player %d and will go %s." %
               (self.__order + 1, 'first' if goes_first else 'second'))
-        print("The game starts with %d stones and you have %d resets." %
-                (self.init_stones, self.init_resets))
+        print("The game starts with %d stones, %d resets, and %d seconds per player." %
+              (self.init_stones, self.init_resets, self.game_time))
         print('---------------------------------------')
 
     def close(self):

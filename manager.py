@@ -242,9 +242,14 @@ class ExpNimManager():
         self.players[1]['name'] = players_data[1]['name']
         
         self.__server.update_all_clients(
-                bytes(json.dumps({'init_stones': self.stones_left,
-                                  'init_resets': self.init_resets,
-                                  'game_time': self.__time_limit}), 'utf-8'))
+                bytes(json.dumps({
+                    'init_stones': self.stones_left,
+                    'init_resets': self.init_resets,
+                    'game_time': self.__time_limit,
+                    'init_max': self.__init_max
+                }), 'utf-8')
+            )
+            
         self.players[0].prev_time = datetime.now()
 
         while True:

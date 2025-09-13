@@ -27,17 +27,18 @@ class Client():
         """
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect(server_address)
-        self.__order = 0 if goes_first else 1
+        self._order = 0 if goes_first else 1
         self.__current_player = None
-        self.__send_json({'name': name, 'order': self.__order})
+        self.__send_json({'name': name, 'order': self._order})
         init_status = self.receive_move()
         self.init_stones = init_status['init_stones']
         self.init_resets = init_status['init_resets']
         self.game_time = init_status.get('game_time', 120)
+        self.init_max = init_status.get('init_max', 3)
 
         print("Welcome to Expanding Nim, %s!" % name)
         print("You are player %d and will go %s." %
-              (self.__order + 1, 'first' if goes_first else 'second'))
+              (self._order + 1, 'first' if goes_first else 'second'))
         print("The game starts with %d stones, %d resets, and %d seconds per player." %
               (self.init_stones, self.init_resets, self.game_time))
         print('---------------------------------------')
@@ -79,7 +80,7 @@ class Client():
         Return:
             A dict containing the keys described above
         """
-        self.__send_json({'order': self.__order, 'num_stones': num_stones,
+        self.__send_json({'order': self._order, 'num_stones': num_stones,
                           'reset': reset})
         return self.receive_move()
 
@@ -103,7 +104,7 @@ class Client():
         try:
             data = self.socket.recv(self.DATA_SIZE).decode('utf-8')
             json_data = json.loads(data)
-            self.__current_player = 1 - self.__order if not json_data.get('finished', True) else None
+            self.__current_player = 1 - self._order if not json_data.get('finished', True) else None
             return json_data
         except (socket.error, json.JSONDecodeError) as e:
             raise ConnectionError(f"Failed to receive move: {e}")
@@ -124,7 +125,7 @@ class Client():
         flag for whether reset should be done. The move and the result
         are printed out.
         """
-        if self.__current_player is not None and self.__current_player != self.__order:
+        if self.__current_player is not None and self.__current_player != self._order:
             print("It's not your turn yet. Waiting for opponent...")
             status = self.receive_move()
             self.__current_player = 1 - self.__current_player
@@ -132,7 +133,7 @@ class Client():
             return self.send_move()  # now read your move
         move = self.__read_move()
         status = self.make_move(move[0], move[1])
-        self.__current_player = 1 - self.__order
+        self.__current_player = 1 - self._order
         print('You took %d stones%s' % (move[0],
             ' and used reset.' if move[1] else '.'))
         print('Current max: %d' % status['current_max'])
@@ -145,7 +146,7 @@ class Client():
     def get_move(self):
         """Gets the move made by the opponent and prints it out"""
         status = self.receive_move()
-        self.__current_player = self.__order
+        self.__current_player = self._order
         print('Opponent took %d stones%s' % (status['stones_removed'],
             ' and used reset.' if status['reset_used'] else '.'))
         print('Current max: %d' % status['current_max'])

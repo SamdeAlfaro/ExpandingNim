@@ -1,5 +1,2 @@
 game-log.txt
-private_test_clients
-backup_client.py
-chatgptclient.py
-myclient.py
+__pycache__
